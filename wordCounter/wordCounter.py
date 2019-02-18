@@ -1,5 +1,6 @@
 from operator import itemgetter
 import sys
+import os
 
 def countWords(file):
     result = {}
@@ -20,16 +21,17 @@ def countWords(file):
     result = tuple(result)
     return result
 
-
-filename = 'file.txt'
-if len(sys.argv) == 1:
-    filename = sys.argv[0]
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
 else:
     raise ValueError("-E- You have to give file name as a command line argument.")
 
 file = open(filename)
-result = countWords(file)
+result_tuple = countWords(file)
 
-result_file_name = file.name + '_result'
-print(result_file_name)
-print(result)
+result_file_name = os.path.basename(file.name)
+result_file_name = os.path.splitext(result_file_name)[0] + '_result.txt'
+
+result_file = open(result_file_name, 'w')
+for item in result_tuple:
+    result_file.write("{0} = {1}\n".format(item[0], item[1]))
